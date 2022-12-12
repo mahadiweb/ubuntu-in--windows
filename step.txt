@@ -1,0 +1,79 @@
+Manual setup windows linux:-
+
+1.Open Control Panel>Programs and Features>Turn windows features on or off>Windows subsystem for linux enable .Then restart your pc.
+
+2.open power shell:
+
+run this command:
+ Invoke-WebRequest -Uri https://aka.ms/wslubuntu2004 -OutFile Ubuntu.appx -UseBasicParsing
+if not working command download from this link:
+ https://aka.ms/wsl-ubuntu-1604
+ or more link- https://faun.pub/how-to-setup-ssh-connection-on-ubuntu-windows-subsystem-for-linux-2b36afb943dc;
+
+
+after download run this command in your downloaded path:
+Add-AppxPackage [appx package name] (Note:after going to downloaded path enter appx file first letter then press Tab button it automatically take full name);
+
+install complite.
+
+
+Install open ssh:-
+
+Step 1: Remove previously installed OpenSSH-server:
+Command:sudo apt remove openssh-server
+
+
+Step 2: Install the latest OpenSSH-server:
+sudo apt install openssh-server
+
+Step 3: Edit the sshd_config:
+Command:sudo nano /etc/ssh/sshd_config
+sshd is known as the secure shell daemon. It serves as the central processing unit for ssh
+
+In the sshd_config, add the following
+
+AllowUsers <your_username user1 user2 / for all * / for group AllowGroups ssh-users/ for spacific subnet host AllowUsers *@192.168.1.0/24>
+Ctrl+s to save and Ctrl+x to exit
+
+Step 4: Check the status of the ssh service:
+Command:sudo service ssh status
+
+If sshd is not running, then run:
+Command:sudo service ssh start
+
+If sshd is running, then run:
+Command:sudo service ssh --full-restart
+
+Step 5: Allow the SSH service to start without asking for a password:
+Command:sudo visudo
+
+Paste the following
+
+%sudo ALL=NOPASSWD: /usr/sbin/sshd
+%sudo ALL=(ALL:ALL) ALL
+
+
+Step 4: Stop the sshd service:
+Command:sudo service ssh stop
+
+Step 5: Run the Start SSH Server Task from the Task Scheduler. Confirm that it worked by running:
+Command:sudo service ssh status
+
+Your output should look like this
+
+* sshd is running
+
+From link:https://faun.pub/how-to-setup-ssh-connection-on-ubuntu-windows-subsystem-for-linux-2b36afb943dc
+
+
+For this error:-
+SSH Public Key - No supported authentication methods available (server sent public key)
+
+Fix:
+Command:sudo nano /etc/ssh/sshd_config file.
+
+Change PasswordAuthentication and ChallengeResponseAuthentication to yes.
+
+3a. Restart:sudo ssh /etc/init.d/ssh restart.
+OR
+3b. better you use:sudo service sshd restart
